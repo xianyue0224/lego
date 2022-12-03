@@ -1,34 +1,50 @@
 <script setup lang="ts">
-import { reactive } from 'vue';
+import { useUserStore } from "../stores/index"
+import { ElMessage } from "element-plus"
+import { useRouter } from "vue-router"
+const userStore = useUserStore()
+const router = useRouter()
+function login() {
+    userStore.login()
+    ElMessage.success({ message: "登录成功，2秒后自动跳转首页~", duration: 2000 })
+    setTimeout(() => {
+        router.push("/")
+    }, 2000);
+}
+function logout() {
+    userStore.logout()
+    ElMessage.success({ message: "已退出登录，2秒后自动跳转首页~", duration: 2000 })
+    setTimeout(() => {
+        router.push("/")
+    }, 2000);
+}
 
-const userInfo = reactive({
-    name: "xianyue0224",
-    avatar_url: "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-})
 </script>
 
 <template>
     <header class="nav">
         <div class="nav_logo">乐高海报</div>
         <div class="nav_menu">
-            <el-button type="primary">
-                创建作品
-            </el-button>
-            <el-button type="primary">
-                我的作品
-            </el-button>
-            <div class="nav_menu_user">
-                <span class="nav_menu_user_name">{{ userInfo.name }}</span>
-                <el-dropdown>
-                    <el-avatar :src="userInfo.avatar_url" />
-                    <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>个人中心</el-dropdown-item>
-                            <el-dropdown-item>退出登录</el-dropdown-item>
-                        </el-dropdown-menu>
-                    </template>
-                </el-dropdown>
-            </div>
+            <template v-if="userStore.user.isLogin">
+                <el-button type="primary">
+                    创建作品
+                </el-button>
+                <el-button type="primary">
+                    我的作品
+                </el-button>
+                <div class="nav_menu_user">
+                    <span class="nav_menu_user_name">{{ userStore.user.userName }}</span>
+                    <el-dropdown>
+                        <el-avatar :src="userStore.user.avatarUrl" />
+                        <template #dropdown>
+                            <el-dropdown-menu>
+                                <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
+                            </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+                </div>
+            </template>
+            <el-button type="primary" v-else @click="login">登录</el-button>
         </div>
     </header>
 </template>

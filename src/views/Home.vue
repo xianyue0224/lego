@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import TemplateList from "../components/TemplateList.vue"
+import { useTemplateStore } from "../stores/index"
+const templateStore = useTemplateStore()
 </script>
 
 <template>
@@ -11,7 +13,7 @@ import TemplateList from "../components/TemplateList.vue"
             </div>
         </el-row>
 
-        <TemplateList />
+        <TemplateList :list="templateStore.templateList" />
 
         <el-row justify="center">
             <el-button type="primary" size="large">

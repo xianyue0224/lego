@@ -1,13 +1,28 @@
-import { ref, computed } from 'vue'
+import { reactive } from 'vue'
 import { defineStore } from 'pinia'
 
+export interface UserProps {
+  isLogin: boolean
+  userName?: string,
+  avatarUrl?: string
+}
+
 export const useUserStore = defineStore('user', () => {
-  const userName = ref("zhangsan")
-  const age = ref(18)
-  const isAdult = computed(() => age.value >= 18)
-  function setName(value: string) {
-    userName.value = value
+  const user: UserProps = reactive({
+    isLogin: false
+  })
+
+  function login() {
+    user.isLogin = true
+    user.userName = "xianyue0224"
+    user.avatarUrl = "https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
   }
 
-  return { userName, age, isAdult, setName }
+  function logout() {
+    user.isLogin = false
+    user.userName = undefined
+    user.avatarUrl = undefined
+  }
+
+  return { user, login, logout }
 })

@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { useHomeStore } from "../stores/index"
+import { useTemplateStore } from "../stores/index"
 import { useRoute } from "vue-router"
 
 const route = useRoute()
-const store = useHomeStore()
+const templateStore = useTemplateStore()
 
-const template = store.list.find(i => i.id === Number(route.params.id))
+const template = templateStore.getTemplateById(Number(route.params.id))
 </script>
 
 <template>
     <div class="work-detail-container">
         <el-row justify="center">
             <el-col :span="8" class="cover-img">
-                <img :src="template?.cover_url" alt="">
+                <img :src="template?.coverImg" alt="">
             </el-col>
             <el-col :span="8">
-                <h2>{{ template?.name }}</h2>
+                <h2>{{ template?.title }}</h2>
                 <!-- <p>{{ currentTemplate.desc }}</p> -->
                 <div class="author">
                     <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">

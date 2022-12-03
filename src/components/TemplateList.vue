@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { Pointer } from "@element-plus/icons-vue"
-import { useHomeStore } from "../stores/index"
 import { useRouter } from "vue-router"
-const store = useHomeStore()
+import type { TemplateProps } from "../stores/templates"
+defineProps<{ list: TemplateProps[] }>()
+
 const router = useRouter()
 function useTemplate(id: number) {
     router.push({ name: "template", params: { id } })
@@ -13,11 +14,11 @@ function useTemplate(id: number) {
 <template>
     <div class="template-list-component">
         <el-row :gutter="16">
-            <el-col :span="6" v-for="item in store.list" :key="item.id" class="poster-item">
+            <el-col :span="6" v-for="item in list" :key="item.id" class="poster-item">
                 <el-card :body-style="{ padding: '0px' }" class="card">
-                    <img :src="item.cover_url" class="image" />
+                    <img :src="item.coverImg" class="image" />
                     <div style="padding: 14px">
-                        <span>{{ item.name }}</span>
+                        <span>{{ item.title }}</span>
                         <div class="bottom">
                             <div class="template_info">
                                 <span>作者：{{ item.author }}</span>
@@ -25,7 +26,7 @@ function useTemplate(id: number) {
                                     <el-icon>
                                         <Pointer />
                                     </el-icon>
-                                    {{ item.views }}
+                                    {{ item.copiedCount }}
                                 </span>
                             </div>
                             <el-button type="primary-plain" class="button"
