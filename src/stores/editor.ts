@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from "uuid"
 import type { TextComponentProps } from "../defaultProps"
@@ -27,7 +27,7 @@ export const useEditorStore = defineStore('editor', () => {
     { id: uuidv4(), name: "l-text", props: { text: "hello3", fontSize: "15px", actionType: "url", url: "https://www.baidu.com" } },
   ])
   // 当前选中的元素的id
-  const currentElement: string | undefined = undefined
+  const currentActivedComponentId = ref<string | undefined>(undefined)
 
   // 添加组件到画布
   function addComponent(props: Partial<TextComponentProps>) {
@@ -40,6 +40,14 @@ export const useEditorStore = defineStore('editor', () => {
     testComponents.value.push(newComponent)
   }
 
+  // 设置某个组件为当前选中组件
+  function setActive(id: string) {
+    currentActivedComponentId.value = id
+  }
 
-  return { testComponents, currentElement, addComponent }
+  // 获取当前激活的组件
+  const currentActivedComponent = computed(() => testComponents.value.find(c => c.id === currentActivedComponentId.value))
+
+
+  return { testComponents, currentActivedComponentId, addComponent, setActive, currentActivedComponent }
 })

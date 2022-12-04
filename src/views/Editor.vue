@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { useEditorStore } from "../stores/index"
 import LText from "../components/LText.vue"
 import ComponentsList from "../components/ComponentsList.vue"
+import EditWrapper from "../components/EditWrapper.vue"
 import { defaultTextTemplates } from "../defaultTextTemplate"
 const editorStore = useEditorStore()
 
@@ -28,11 +29,16 @@ function matchComponent(name: string) {
                 </el-col>
                 <el-col :span="12" class="middle">
                     <h1>画布区域</h1>
-                    <component v-for="component in components" :key="component.id" :is="matchComponent(component.name)"
-                        v-bind="component.props">
-                    </component>
+                    <EditWrapper v-for="component in components" :key="component.id" :id="component.id"
+                        :active="(editorStore.currentActivedComponentId === component.id)"
+                        @set-active="editorStore.setActive">
+                        <component :is="matchComponent(component.name)" v-bind="component.props">
+                        </component>
+                    </EditWrapper>
                 </el-col>
-                <el-col :span="6" class="right">右</el-col>
+                <el-col :span="6" class="right">
+                    {{ editorStore.currentActivedComponent?.props }}
+                </el-col>
             </el-row>
         </el-main>
     </el-container>
